@@ -67,7 +67,7 @@ md = {'Officetels_Name':opt.iloc[:,0],
       'CONVENIENCE':d4, 'ELEC_CHARGE':d5, 'CLINIC_OS':d6}
 
 tmp_df = pd.DataFrame(md)
-tmp_df.head()
+# tmp_df.head()
 
 
 # --------------------------------
