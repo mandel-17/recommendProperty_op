@@ -5,6 +5,7 @@
 import pandas as pd
 from haversine import haversine
 import folium
+import webbrowser
 from tqdm import tqdm
 
 # --------------------------------
@@ -67,7 +68,7 @@ md = {'Officetels_Name':opt.iloc[:,0],
       'CONVENIENCE':d4, 'ELEC_CHARGE':d5, 'CLINIC_OS':d6}
 
 tmp_df = pd.DataFrame(md)
-# tmp_df.head()
+# print(tmp_df.head())
 
 
 # --------------------------------
@@ -92,7 +93,7 @@ for i in range(len(infra_columns)):
 # tmp_df.head()
 
 # adding weight
-survey = pd.read_csv('survey_result.csv')
+survey = pd.read_csv('docs/datasets/survey_result.csv')
 w = survey / 5
 
 tmp_df[['LAUN_Score_w', 'FIT_Score_w',
@@ -112,7 +113,7 @@ score = tmp_df[['Officetels_Name', 'LAT', 'LNG',
                 'ELEC_Score_w', 'CLINIC_Score_w',
                 'Total_Score_w', 'AVG_Score_w']]
 result = score.sort_values(by='AVG_Score_w', ascending=False).reset_index(drop=True).head(5)
-# result.head()
+# print(result.head())
 
 
 # --------------------------------
@@ -126,8 +127,16 @@ def make_marker(map, x, y,z):
 
 # visualize the result on a map
 map = folium.Map(location=[result['LAT'][0], result['LNG'][0]], zoom_start=12)
-make_marker(map, result['LAT'], result['LNG'],result['Officetels_Name'])
-# map
+make_marker(map, result['LAT'], result['LNG'], result['Officetels_Name'])
+
+def map_open(path):
+    html_page = f'{path}'
+    map.save(html_page)
+    # open in browser
+    new = 2
+    webbrowser.open(html_page, new=new)
+
+# map_open('map.html')
 
 
 # --------------------------------
@@ -192,6 +201,4 @@ def COUNT_INFRA(lat, lon):
 
   return df
 
-# count infra in distance conditions
-cnt = COUNT_INFRA(lat, lon)
-# cnt
+# COUNT_INFRA(lat, lon)
