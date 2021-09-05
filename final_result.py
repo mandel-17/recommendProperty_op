@@ -15,8 +15,8 @@ laundry = pd.read_csv('docs/datasets/bundag_laundry.csv')
 fitness = pd.read_csv('docs/datasets/bundag_fitness.csv')
 macdonalds = pd.read_csv('docs/datasets/bundag_MacDonalds.csv')
 convenience = pd.read_csv('docs/datasets/bundag_convenience.csv')
-elec = pd.read_csv('docs/datasets/bundag_elec_charge.csv')
-clinic = pd.read_csv('docs/datasets/bundag_clinic_Orth.csv')
+elec_charge = pd.read_csv('docs/datasets/bundag_elec_charge.csv')
+clinic_os = pd.read_csv('docs/datasets/bundag_clinic_Orth.csv')
 
 # inplace '-'
 fitness.drop(index=fitness[fitness['위도'] == '-'].index, inplace=True)
@@ -28,7 +28,7 @@ convenience = convenience.reset_index(drop=True)
 opt.rename(columns={'오피스텔명':'Officetels_Name',
                     '위도':'LAT', '경도':'LNG'}, inplace=True)
 
-infra = [laundry, fitness, macdonalds, convenience, elec, clinic]
+infra = [laundry, fitness, macdonalds, convenience, elec_charge, clinic_os]
 for i in range(len(infra)):
     infra[i].rename(columns={'위도':'LAT', '경도':'LNG'}, inplace=True)
 
@@ -56,8 +56,8 @@ d1 = DISTANCE(opt['LAT'], opt['LNG'], laundry['LAT'], laundry['LNG'])
 d2 = DISTANCE(opt['LAT'], opt['LNG'], fitness['LAT'], fitness['LNG'])
 d3 = DISTANCE(opt['LAT'], opt['LNG'], macdonalds['LAT'], macdonalds['LNG'])
 d4 = DISTANCE(opt['LAT'], opt['LNG'], convenience['LAT'], convenience['LNG'])
-d5 = DISTANCE(opt['LAT'], opt['LNG'], elec['LAT'], elec['LNG'])
-d6 = DISTANCE(opt['LAT'], opt['LNG'], clinic['LAT'], clinic['LNG'])
+d5 = DISTANCE(opt['LAT'], opt['LNG'], elec_charge['LAT'], elec_charge['LNG'])
+d6 = DISTANCE(opt['LAT'], opt['LNG'], clinic_os['LAT'], clinic_os['LNG'])
 
 md = {'Officetels_Name':opt.iloc[:,0],
       'LAT':opt.iloc[:,2], 'LNG':opt.iloc[:,3],
@@ -123,7 +123,7 @@ def make_marker(map, x, y,z):
     folium.Marker([float(x[i]), float(y[i])], popup=z[i]).add_to(map)
 
 # visualize the result on a map
-map = folium.Map(location=[result['LAT'][0], result['LNG'][0]], zoom_start=12)
+map = folium.Map(location=[result['LAT'][0], result['LNG'][0]], zoom_start=13)
 make_marker(map, result['LAT'], result['LNG'], result['Officetels_Name'])
 
 def map_open(path):
@@ -141,9 +141,9 @@ def map_open(path):
 # --------------------------------
 
 lat = [laundry['LAT'], fitness['LAT'], macdonalds['LAT'],
-       convenience['LAT'], elec['LAT'], clinic['LAT']]
+       convenience['LAT'], elec_charge['LAT'], clinic_os['LAT']]
 lon = [laundry['LNG'], fitness['LNG'], macdonalds['LNG'],
-       convenience['LNG'], elec['LNG'], clinic['LNG']]
+       convenience['LNG'], elec_charge['LNG'], clinic_os['LNG']]
 
 # function of all distance
 def ALL_DISTANCE(x_1, y_1, x_2, y_2):
@@ -161,13 +161,12 @@ def ALL_DISTANCE(x_1, y_1, x_2, y_2):
 
 # funtion of counting infra
 def COUNT_INFRA(lat, lon):
-  global df
   for i in tqdm(range(len(opt))):
     li_500 = []
     li_1000 = []
     li_2000 = []
     li_3000 = []
-    li_4000 = []
+    li_5000 = []
 
     for i2 in range(len(lat)):
       sd = ALL_DISTANCE(opt['LAT'], opt['LNG'], lat[i2], lon[i2])
@@ -177,13 +176,13 @@ def COUNT_INFRA(lat, lon):
       d_1000 = sd_df[(sd_df['DX'] >= 500) & (sd_df['DX'] < 1000)].count().values[0]
       d_2000 = sd_df[(sd_df['DX'] >= 1000) & (sd_df['DX'] < 2000)].count().values[0]
       d_3000 = sd_df[(sd_df['DX'] >= 2000) & (sd_df['DX'] < 3000)].count().values[0]
-      d_4000 = sd_df[sd_df['DX'] >= 3000 & (sd_df['DX'] < 4000)].count().values[0]
+      d_5000 = sd_df[sd_df['DX'] >= 3000 & (sd_df['DX'] < 5000)].count().values[0]
 
       li_500.append(d_500)
       li_1000.append(d_1000)
       li_2000.append(d_2000)
       li_3000.append(d_3000)
-      li_4000.append(d_4000)
+      li_5000.append(d_5000)
 
     index = ['Laundry', 'Fitness', 'MacDonalds',
              'Convenience', 'Elec_Charge', 'Clinic_OS']
@@ -192,7 +191,7 @@ def COUNT_INFRA(lat, lon):
     df['500m ~ 1km'] = li_1000
     df['1km ~ 2km'] = li_2000
     df['2km ~ 3km'] = li_3000
-    df['3km ~ 5km'] = li_4000
+    df['3km ~ 5km'] = li_5000
 
     df.to_csv('docs/table/' + opt['Officetels_Name'][i] + '.csv')
 
