@@ -31,13 +31,13 @@ recommendProperty_op
 * 라이프스타일 요소: 세탁소, 헬스장, 맥도날드, 편의점, 전기차 충전소, 정형외과
 
 ### 변수 설명
-* opt: 오피스텔
-* opt: 세탁소
-* fitness: 헬스장
-* macdonalds: 맥도날드
-* convenience: 편의점
-* elec_charge: 전기차 충전소
-* clinic_os: 정형외과
+* opt: 분당구에 위치한 오피스텔
+* opt: 분당구에 위치한 세탁소
+* fitness: 분당구에 위치한 헬스장
+* macdonalds: 분당구에 위치한 맥도날드
+* convenience: 분당구에 위치한 편의점
+* elec_charge: 분당구에 위치한 전기차 충전소
+* clinic_os: 분당구에 위치한 정형외과
 
 ### 프로세스 설명
 #### 1. Preprocessing Data (데이터 전처리)
