@@ -38,7 +38,7 @@ recommendProperty_op
 
 ### 변수 설명
 * opt: 분당구에 위치한 오피스텔
-* opt: 분당구에 위치한 세탁소
+* laundry: 분당구에 위치한 세탁소
 * fitness: 분당구에 위치한 헬스장
 * macdonalds: 분당구에 위치한 맥도날드
 * convenience: 분당구에 위치한 편의점
